@@ -15,11 +15,7 @@ sprite_sheet = spritesheet.SpriteSheet(sprite_sheet_image)
 
 BLACK = (0, 0, 0)
 
-animation_list = []
-BG = (50, 50, 50)
-
-for x in range(2, 7):
-    animation_list.append(sprite_sheet.get_image(x, 24, 24, 3, BLACK))
+BG = (50, 50, 50)    
 
 player_x = 0
 player_y = 0
@@ -31,6 +27,8 @@ ANIMATION_COOLDOWN = 100
 is_moving = False
 
 run = True
+
+flip = False
 while run:
 
     screen.fill(BG)
@@ -45,9 +43,11 @@ while run:
     if keys[pygame.K_a]:
         player_x -= player_speed
         is_moving = True
+        flip = True
     if keys[pygame.K_d]:
         player_x += player_speed
         is_moving = True
+        flip = False
     if keys[pygame.K_w]:
         player_y -= player_speed
         is_moving = True
@@ -60,12 +60,12 @@ while run:
         if current_time - last_update >= ANIMATION_COOLDOWN:
             current_frame += 1
             last_update = current_time
-            if current_frame >= len(animation_list):
+            if current_frame >= 6:
                 current_frame = 0
     else:
         current_frame = 0
-
-    screen.blit(animation_list[current_frame], (player_x, player_y))
+    
+    screen.blit(sprite_sheet.get_image(current_frame+2, 24, 24, 3, BLACK, flip), (player_x, player_y))
 
     pygame.display.update()
     clock.tick(FPS)
